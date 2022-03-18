@@ -1,6 +1,6 @@
 discord:
   token: ${DISCORD_TOKEN:You can obtain a valid bot token at https://discord.com/developers/applications}
-  development-guild-id: 69122776210250143
+  development-guild-id: 932728712355512331
 
 spring:
   datasource:
