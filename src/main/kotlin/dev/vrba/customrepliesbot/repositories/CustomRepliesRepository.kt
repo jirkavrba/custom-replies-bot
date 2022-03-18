@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface CustomRepliesRepository : PagingAndSortingRepository<CustomReply, UUID>
+interface CustomRepliesRepository : PagingAndSortingRepository<CustomReply, UUID> {
+
+    fun findAllByGuildId(guildId: Long): List<CustomReply>
+
+}
