@@ -36,6 +36,7 @@ class CustomRepliesServiceTests {
         assertTrue(service.findMatchingReplies(message, 3L).all { it.guildId == 3L })
     }
 
+    @Test
     fun `test matching messages`() {
         val first = CustomReply(name = "test1", trigger = "test", response = "lmao", guildId = 1L)
         val second = CustomReply(name = "test2", trigger = "not test", response = "kekw", guildId = 1L)
@@ -51,11 +52,13 @@ class CustomRepliesServiceTests {
         assertEquals(1, service.findMatchingReplies("sample test", guild).size)
         assertEquals("test1", service.findMatchingReplies("sample test", guild).first().name)
 
-        assertEquals(2, service.findMatchingReplies("not test", guild).size)
+        assertEquals(3, service.findMatchingReplies("not test", guild).size)
         assertTrue(service.findMatchingReplies("not test", guild).any { it.name == "test1" })
         assertTrue(service.findMatchingReplies("not test", guild).any { it.name == "test2" })
+        assertTrue(service.findMatchingReplies("not test", guild).any { it.name == "test3" })
 
-        assertEquals(1, service.findMatchingReplies("not so sample test", guild).size)
-        assertTrue(service.findMatchingReplies("not so sample test", guild).all { it.name == "test3" })
+        assertEquals(2, service.findMatchingReplies("not so sample test", guild).size)
+        assertTrue(service.findMatchingReplies("not so sample test", guild).any { it.name == "test1" })
+        assertTrue(service.findMatchingReplies("not so sample test", guild).any { it.name == "test3" })
     }
 }
