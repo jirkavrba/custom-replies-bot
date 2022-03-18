@@ -1,4 +1,4 @@
-package dev.vrba.customrepliesbot.service
+package dev.vrba.customrepliesbot.services
 
 import dev.vrba.customrepliesbot.entities.CustomReply
 import dev.vrba.customrepliesbot.repositories.CustomRepliesRepository
