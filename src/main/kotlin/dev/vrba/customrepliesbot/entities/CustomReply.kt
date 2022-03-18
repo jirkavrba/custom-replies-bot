@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint
 )
 data class CustomReply(
     @Id
-    var id: UUID = UUID.randomUUID(),
+    val id: UUID = UUID.randomUUID(),
 
     @Column(nullable = false)
     val name: String,
