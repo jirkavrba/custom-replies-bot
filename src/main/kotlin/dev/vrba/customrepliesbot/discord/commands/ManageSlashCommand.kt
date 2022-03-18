@@ -33,10 +33,13 @@ class ManageSlashCommand : SlashCommand {
         }
 
         val embed = createDashboardEmbed(member)
-        val buttons = listOf<Button>() // TODO
+        val buttons = listOf<Button>(
+                Button.primary("manage:replies", "⭐ Manage replies"),
+                Button.secondary("soon-tm", "More features coming soon").asDisabled()
+        )
 
         interaction.editOriginalEmbeds(embed)
-//                .setActionRow(buttons)
+                .setActionRow(buttons)
                 .queue()
     }
 
