@@ -1,3 +1,14 @@
 discord:
   token: ${DISCORD_TOKEN:You can obtain a valid bot token at https://discord.com/developers/applications}
   development-guild-id: 69122776210250143
+
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/replies}
+    username: ${DISCORD_USERNAME:replies}
+    password: ${DISCORD_PASSWORD:replies}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
