@@ -28,5 +28,8 @@ data class CustomReply(
     val response: String,
 
     @Column(name = "guild_id", nullable = false)
-    val guildId: Long
+    val guildId: Long,
+
+    @Column(name = "image_only", nullable = false)
+    val imageOnly: Boolean = false
 )

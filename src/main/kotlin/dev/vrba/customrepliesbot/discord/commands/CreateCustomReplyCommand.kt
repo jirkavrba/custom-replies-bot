@@ -18,11 +18,13 @@ class CreateCustomReplyCommand(private val repository: CustomRepliesRepository) 
         .addOption(OptionType.STRING, "name", "Name (used for managing replies)", true)
         .addOption(OptionType.STRING, "trigger", "Word / phrase that triggers this reply", true)
         .addOption(OptionType.STRING, "response", "Text that should be responded with", true)
+        .addOption(OptionType.BOOLEAN, "image", "Should the response be an embedded image?")
 
     override fun execute(event: SlashCommandInteractionEvent) {
         val name = event.getOption("name")?.asString ?: throw IllegalArgumentException("Missing the name parameter")
         val trigger = event.getOption("trigger")?.asString ?: throw IllegalArgumentException("Missing the trigger parameter")
         val response = event.getOption("response")?.asString ?: throw IllegalArgumentException("Missing the response parameter")
+        val image = event.getOption("image")?.asBoolean ?: false
 
         if (!event.isFromGuild) {
             return event.reply("Sorry, this command can be only used inside guilds").queue()
@@ -45,7 +47,8 @@ class CreateCustomReplyCommand(private val repository: CustomRepliesRepository) 
             return interaction.editOriginalEmbeds(embed).queue()
         }
 
-        val reply = repository.save(CustomReply(name = name, trigger = trigger, response = response, guildId = guild))
+        val entity = CustomReply(name = name, trigger = trigger, response = response, guildId = guild, imageOnly = image)
+        val reply = repository.save(entity)
         val embed = EmbedBuilder()
             .setColor(0x57F287)
             .setTitle("Custom reply created")
