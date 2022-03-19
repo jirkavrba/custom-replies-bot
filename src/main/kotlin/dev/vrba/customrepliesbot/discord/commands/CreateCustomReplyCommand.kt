@@ -1,6 +1,7 @@
 package dev.vrba.customrepliesbot.discord.commands
 
-import dev.vrba.customrepliesbot.services.CustomRepliesService
+import dev.vrba.customrepliesbot.entities.CustomReply
+import dev.vrba.customrepliesbot.repositories.CustomRepliesRepository
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -8,9 +9,10 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 import org.springframework.stereotype.Component
+import java.time.Instant
 
 @Component
-class CreateCustomReplyCommand(private val service: CustomRepliesService) : SlashCommand {
+class CreateCustomReplyCommand(private val repository: CustomRepliesRepository) : SlashCommand {
 
     override val definition: SlashCommandData = Commands.slash("create-custom-reply", "Create a new custom reply mapping for this guild")
         .addOption(OptionType.STRING, "name", "Name (used for managing replies)", true)
@@ -31,9 +33,19 @@ class CreateCustomReplyCommand(private val service: CustomRepliesService) : Slas
         }
 
         val interaction = event.deferReply().complete()
+        val guild =  event.guild!!.idLong
 
-        val guild =  event.guild?.idLong ?: 0
-        val reply = service.createCustomReply(name, trigger, response, guild)
+        if (repository.existsByGuildIdAndName(guild, name)) {
+            val embed = EmbedBuilder()
+                .setColor(0xED4245)
+                .setTitle("There is already a custom reply with this name registered to this guild")
+                .setTimestamp(Instant.now())
+                .build()
+
+            return interaction.editOriginalEmbeds(embed).queue()
+        }
+
+        val reply = repository.save(CustomReply(name = name, trigger = trigger, response = response, guildId = guild))
         val embed = EmbedBuilder()
             .setColor(0x57F287)
             .setTitle("Custom reply created")

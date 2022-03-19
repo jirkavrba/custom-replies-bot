@@ -22,7 +22,4 @@ class CustomRepliesService(private val repository: CustomRepliesRepository) {
     @Suppress("NAME_SHADOWING")
     fun getCustomRepliesPage(guild: Long, page: Int): Page<CustomReply> =
             repository.findAllByGuildId(guild, PageRequest.of(page, 1))
-
-    fun createCustomReply(name: String, trigger: String, response: String, guild: Long): CustomReply =
-        repository.save(CustomReply(name = name, trigger = trigger, response = response, guildId = guild))
 }
