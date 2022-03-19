@@ -1,5 +1,6 @@
 package dev.vrba.customrepliesbot.discord.commands
 
+import dev.vrba.customrepliesbot.discord.utilities.Embeds
 import dev.vrba.customrepliesbot.entities.CustomReply
 import dev.vrba.customrepliesbot.repositories.CustomRepliesRepository
 import net.dv8tion.jda.api.EmbedBuilder
@@ -40,15 +41,7 @@ class CreateCustomReplyCommand(private val repository: CustomRepliesRepository) 
 
         val entity = CustomReply(name = name, trigger = trigger, response = response, guildId = guild, image = image)
         val reply = repository.save(entity)
-        val embed = EmbedBuilder()
-            .setColor(0x57F287)
-            .setTitle("Custom reply created")
-            .addField("Name", name, false)
-            .addField("Trigger", trigger, false)
-            .addField("Response", response, false)
-            .addField("Image", image ?: "_No embed image_", false)
-            .setFooter(reply.id.toString())
-            .build()
+        val embed = Embeds.customReplyEmbed(reply, "Custom reply created")
 
         interaction.editOriginalEmbeds(embed).queue()
     }
