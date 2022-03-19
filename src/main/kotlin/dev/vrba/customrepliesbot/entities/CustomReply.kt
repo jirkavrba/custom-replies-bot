@@ -27,9 +27,10 @@ data class CustomReply(
     @Column(nullable = false)
     val response: String,
 
+    @Column(nullable = true)
+    val image: String? = null,
+
     @Column(name = "guild_id", nullable = false)
     val guildId: Long,
 
-    @Column(name = "image_only", nullable = false)
-    val imageOnly: Boolean = false
 )

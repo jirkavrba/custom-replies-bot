@@ -14,9 +14,15 @@ class MessageHandler(private val service: CustomRepliesService): ListenerAdapter
         val replies = service.findMatchingReplies(event.message.contentRaw, guild)
 
         replies.forEach {
-            if (it.imageOnly) {
-                val embed = EmbedBuilder().setImage(it.response).build()
-                return@forEach event.message.replyEmbeds(embed).queue()
+            if (it.image != null) {
+                val embed = EmbedBuilder()
+                    .setTitle(it.response)
+                    .setImage(it.image)
+                    .build()
+
+                return@forEach event.message
+                    .replyEmbeds(embed)
+                    .queue()
             }
 
             event.message.reply(it.response).queue()
