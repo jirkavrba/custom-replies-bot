@@ -13,7 +13,7 @@ class CustomRepliesService(private val repository: CustomRepliesRepository) {
         val replies = repository.findAllByGuildId(guild)
         val matching = replies.filter {
             // TODO: Maybe change this to a more sophisticated matching pattern
-            message.contains(it.trigger)
+            message.lowercase().contains(it.trigger.lowercase())
         }
 
         return matching
