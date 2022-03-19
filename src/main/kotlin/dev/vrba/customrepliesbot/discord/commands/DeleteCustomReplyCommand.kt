@@ -19,14 +19,6 @@ class DeleteCustomReplyCommand(private val repository: CustomRepliesRepository) 
     override fun execute(event: SlashCommandInteractionEvent) {
         val name = event.getOption("name")?.asString ?: throw IllegalArgumentException("Missing the name parameter")
 
-        if (!event.isFromGuild) {
-            return event.reply("Sorry, this command can be only used inside guilds").queue()
-        }
-
-        if (!event.member!!.hasPermission(Permission.MANAGE_SERVER)) {
-            return event.reply("Sorry, this command can be only used by administrators of this guild").queue()
-        }
-
         val interaction = event.deferReply().complete()
         val guild =  event.guild!!.idLong
         val reply = repository.findByGuildIdAndName(guild, name)

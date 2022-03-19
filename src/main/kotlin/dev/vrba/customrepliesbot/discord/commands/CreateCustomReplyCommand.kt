@@ -26,14 +26,6 @@ class CreateCustomReplyCommand(private val repository: CustomRepliesRepository) 
         val response = event.getOption("response")?.asString ?: throw IllegalArgumentException("Missing the response parameter")
         val image = event.getOption("image")?.asString
 
-        if (!event.isFromGuild) {
-            return event.reply("Sorry, this command can be only used inside guilds").queue()
-        }
-
-        if (!event.member!!.hasPermission(Permission.MANAGE_SERVER)) {
-            return event.reply("Sorry, this command can be only used by administrators of this guild").queue()
-        }
-
         val interaction = event.deferReply().complete()
         val guild =  event.guild!!.idLong
 
