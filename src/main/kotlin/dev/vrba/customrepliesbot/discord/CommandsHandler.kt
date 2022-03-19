@@ -2,6 +2,7 @@ package dev.vrba.customrepliesbot.discord
 
 import dev.vrba.customrepliesbot.configuration.DiscordConfiguration
 import dev.vrba.customrepliesbot.discord.commands.SlashCommand
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.core.env.Environment
 import org.springframework.core.env.Profiles
 import org.springframework.stereotype.Component
+import java.time.Instant
 
 @Component
 class CommandsHandler(
@@ -43,7 +45,22 @@ class CommandsHandler(
         val handler = commands.firstOrNull { it.definition.name == name }
                 ?: return logger.warn("Cannot find slash command handler for /$name")
 
-        // TODO: Add proper exception handling
-        handler.execute(event)
+        try {
+            handler.execute(event)
+        }
+        catch (exception: Throwable) {
+            val embed = EmbedBuilder()
+                .setColor(0xED4245)
+                .setTitle("Sorry, there was an error")
+                .setDescription("`${exception.message}`")
+                .setTimestamp(Instant.now())
+                .build()
+
+            if (event.interaction.isAcknowledged) {
+                return event.interaction.hook.editOriginalEmbeds(embed).queue()
+            }
+
+            event.interaction.replyEmbeds(embed).queue()
+        }
     }
 }
