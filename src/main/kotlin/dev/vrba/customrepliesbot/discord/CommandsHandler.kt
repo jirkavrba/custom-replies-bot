@@ -2,6 +2,7 @@ package dev.vrba.customrepliesbot.discord
 
 import dev.vrba.customrepliesbot.configuration.DiscordConfiguration
 import dev.vrba.customrepliesbot.discord.commands.SlashCommand
+import dev.vrba.customrepliesbot.discord.utilities.Embeds
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.ReadyEvent
@@ -47,11 +48,11 @@ class CommandsHandler(
                 ?: return logger.warn("Cannot find slash command handler for /$name")
 
         if (!event.isFromGuild) {
-            return event.reply("Sorry, this command can be only used inside guilds").queue()
+            return event.replyEmbeds(Embeds.error("Sorry, this command can be only used inside guilds")).queue()
         }
 
         if (event.member?.hasPermission(Permission.MANAGE_SERVER) != true) {
-            return event.reply("Sorry, this command can be only used by administrators of this guild").queue()
+            return event.replyEmbeds(Embeds.error("Sorry, this command can be only used by administrators of this guild")).queue()
         }
 
         try {
