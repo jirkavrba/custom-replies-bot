@@ -5,8 +5,8 @@ discord:
 spring:
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/replies}
-    username: ${DISCORD_USERNAME:replies}
-    password: ${DISCORD_PASSWORD:replies}
+    username: ${DATABASE_USERNAME:replies}
+    password: ${DATABASE_PASSWORD:replies}
     driver-class-name: org.postgresql.Driver
 
   jpa:
