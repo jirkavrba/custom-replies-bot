@@ -15,4 +15,6 @@ interface CustomRepliesRepository : PagingAndSortingRepository<CustomReply, UUID
     fun findAllByGuildId(guildId: Long, page: Pageable): Page<CustomReply>
 
     fun existsByGuildIdAndName(guildId: Long, name: String): Boolean
+
+    fun findByGuildIdAndName(guild: Long, name: String): CustomReply?
 }
