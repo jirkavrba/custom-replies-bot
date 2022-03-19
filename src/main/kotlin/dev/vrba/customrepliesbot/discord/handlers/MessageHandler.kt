@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component
 class MessageHandler(private val service: CustomRepliesService): ListenerAdapter() {
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
+        // Ignore messages from the bot itself to prevent infinite loops
+        if (event.author.idLong == event.jda.selfUser.idLong) return
+
         val guild = event.guild?.idLong ?: return
         val replies = service.findMatchingReplies(event.message.contentRaw, guild)
 
