@@ -21,8 +21,9 @@ class MessageHandler(private val service: CustomRepliesService): ListenerAdapter
 
         replies.forEach {
             if (it.image != null) {
+                val content = it.response.replace(mention, event.message.author.name) // <@id> mentions don't work in embed titles
                 val embed = EmbedBuilder()
-                    .setTitle(it.response)
+                    .setTitle(content)
                     .setImage(it.image)
                     .build()
 
