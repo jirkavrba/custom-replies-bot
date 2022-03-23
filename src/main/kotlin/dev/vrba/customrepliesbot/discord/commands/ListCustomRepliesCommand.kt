@@ -4,6 +4,7 @@ import dev.vrba.customrepliesbot.discord.utilities.Embeds
 import dev.vrba.customrepliesbot.repositories.CustomRepliesRepository
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.OptionType
 import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData
 import net.dv8tion.jda.api.interactions.components.buttons.Button
@@ -14,11 +15,21 @@ import org.springframework.stereotype.Component
 class ListCustomRepliesCommand(private val repository: CustomRepliesRepository) : SlashCommand {
 
     override val definition: SlashCommandData = Commands.slash("list-custom-replies", "List custom replies for this guild")
+        .addOption(OptionType.BOOLEAN, "compact", "Defaults to false (1 reply per embed)", false)
 
     override fun execute(event: SlashCommandInteractionEvent) {
         val interaction = event.deferReply().complete()
-
         val guild = event.guild?.idLong ?: return
+
+        val compact = event.getOption("compact")?.asBoolean ?: false
+
+        if (compact) {
+            val replies = repository.findAllByGuildId(guild)
+            val embed = Embeds.customRepliesCompactEmbed(replies)
+
+            return interaction.editOriginalEmbeds(embed).queue()
+        }
+
         val page = repository.findAllByGuildId(guild, PageRequest.of(0, 1))
 
         if (!page.hasContent()) {

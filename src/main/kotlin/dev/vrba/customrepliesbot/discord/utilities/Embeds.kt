@@ -26,6 +26,18 @@ object Embeds {
             .setFooter(reply.id.toString())
             .build()
 
+    fun customRepliesCompactEmbed(replies: List<CustomReply>): MessageEmbed =
+        EmbedBuilder()
+            .setColor(0x5865F2)
+            .setTitle("Custom replies registered for this guild")
+            .setDescription(replies.joinToString("\n\n") {
+                """
+                **${it.name}**:
+                ${it.trigger} -> ${it.response}
+                """.trimIndent()
+            })
+            .build()
+
     fun customRepliesPageEmbed(page: Page<CustomReply>): MessageEmbed {
         val reply = page.content.first()
         val title = "Custom reply ${page.number + 1} / ${page.totalPages}"
