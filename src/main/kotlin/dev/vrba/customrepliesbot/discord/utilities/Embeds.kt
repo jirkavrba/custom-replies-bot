@@ -33,7 +33,7 @@ object Embeds {
             .setDescription(replies.joinToString("\n\n") {
                 """
                 **${it.name}**:
-                ${it.trigger} -> ${it.response}
+                ${it.trigger} ➔ ${it.response}
                 """.trimIndent()
             })
             .build()
